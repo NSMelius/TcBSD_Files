@@ -1,0 +1,15 @@
+doas mkdir -p vms/debian
+
+doas fetch -o "$HOME/vms/debian/debian-installer.iso" https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.3.0-amd64-netinst.iso
+
+doas zfs create -sV 10G -o volmode=dev "zroot/debian-vm_disk0"
+
+cloned_interfaces="bridge0"
+
+pass in quick on bridge0
+pass in quick proto tcp to port 5900
+
+pass in quick proto tcp to port 48898
+
+doas pfctl -f /etc/pf.conf.d/bhf
+

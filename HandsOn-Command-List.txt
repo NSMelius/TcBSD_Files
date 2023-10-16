@@ -1,0 +1,97 @@
+#----------------------------------------------------
+#1 Basic Commands
+#----------------------------------------------------
+
+#Reboot the PC. Choose either
+doas shutdown –r now
+doas reboot
+#Run as Administrator:
+doas
+#Text editors
+ee #simple to use
+nano # more veristile without being as obtuse as VIM
+vim #Very robust text editor, how to quit out of it has become a meme
+
+#Get a list of hardware messages
+dmesg
+
+#filter an output for lines with a keyword
+grep #example: dmesg | grep memory will output only the lines of dmesg that contain the string "memory"
+
+#pkg commands
+pkg update
+pkg upgrade
+pkg install
+
+#command to edit or add a line in /etc/rc.conf without opening the file in a text editor
+doas sysrc (variableName)="value" # example: doas sysrc ifconfig_em0="inet 192.168.0.2 netmask 255.255.0.0"
+#Beckhoff Write Filter toggle. Requires reboot of Tc/BSD
+doas service bwf enable
+doas service bwf disable
+
+#----------------------------------------------------
+#2 Changing IP Address with DHCPCD
+#----------------------------------------------------
+doas ee /etc/rc.conf
+#add line
+ifoncfig_nic="inet <ipaddress> netmask <255.255.255.0"
+#edit line dhcpcd_flags="--waitip" to
+dhcpcd_flags="--denyinterfaces nic"
+
+doas service netif restart && doas service dhcpcd restart
+#----------------------------------------------------
+#3 Installing TwinCAT Functions
+#----------------------------------------------------
+doas pkg install TF6100-OPC-UA-beta
+
+#----------------------------------------------------
+#4 tcbsd-upgrade commands
+#----------------------------------------------------
+
+#Major: 12->13
+doas tcbsd-upgrade --major
+
+#Minor: 13.0->13.2
+doas tcbsd-upgrade --minor
+
+#----------------------------------------------------
+#5 mounting a USB drive
+#----------------------------------------------------
+doas mkdir /mnt/usb/
+doas mount –t msdosfs /dev/da0s1 /mnt/usb/
+
+#----------------------------------------------------
+#6 Setting Automount
+#----------------------------------------------------
+#open auto_master and uncomment the line beginning with /media
+doas ee /etc/auto_master
+#Open devd.conf and ad the following lines
+doas ee /etc/devd.conf
+notify 100 {
+    match   "system"    "GEOM";
+    match   "subsystem" "DEV";
+    action  "/usr/sbin/automount -c";
+};
+
+#Enable automount on startup
+doas sysrc autofs_enable=“YES”
+
+doas service automount start
+doas service automountd start
+doas service autounmountd start
+doas service devd restart
+
+#----------------------------------------------------
+#7 Setting up a local repository
+#----------------------------------------------------
+
+#create a mounting point for a USB with our packages
+doas mkdir /mnt/usb
+doas mount_msdosfs /dev/da0s1 /mnt/usb
+
+#Set the pkg manager to use the usb drive's directory for the local repository
+doas sh /usr/local/share/examples/bhf/pkgrepo-set.sh file:///mnt/usb/tcbsd/repository/packages
+
+#get all packages from repo in Tc/BSD
+doas wget --recursive --timestamping --level=inf --no-cache --no-parent --no-cookies --no-host-directories --relative --directory-prefix /tmp/mirror https://tcbsd.beckhoff.com/TCBSD/13/stable/packages/
+

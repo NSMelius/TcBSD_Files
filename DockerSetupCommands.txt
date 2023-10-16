@@ -1,0 +1,51 @@
+sudo wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+
+sudo dpkg -i packages-microsoft-prod.deb
+
+sudo rm packages-microsoft-prod.deb
+
+sudo apt update
+
+sudo apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common dotnet-sdk-6.0 unzip
+
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+
+sudo apt update
+
+sudo apt-cache policy docker-ce
+
+sudo apt install -y docker-ce
+
+systemctl status docker  
+
+
+
+cd $HOME
+
+sudo wget https://github.com/Beckhoff/TF6000_ADS_DOTNET_V5_Samples/archive/refs/heads/main.zip 
+
+sudo unzip main.zip
+
+sudo rm main.zip
+
+cd $HOME/TF6000_ADS_DOTNET_V5_Samples-main/Sources/RouterSamples/AdsRouterConsoleApp/
+
+sudo docker build -t ads-router-console --target=final --file Dockerfile . 
+
+cd $HOME/TF6000_ADS_DOTNET_V5_Samples-main/Sources/ClientSamples/AdsCli/
+
+sudo docker build -t ads-cli-client:latest .
+
+sudo docker images
+
+cd $HOME/TF6000_ADS_DOTNET_V5_Samples-main/Sources/RouterSamples/AdsRouterConsoleApp/
+
+sudo cp ./src/settings-bridged-network.env ./settings.env
+
+sudo nano settings.env
+
+sudo docker run -it --rm --name adsrouter --env-file=settings.env --ip 172.17.0.2 -p 48898:48900 ads-router-console
+
+sudo docker run -it --rm --env "AmsConfiguration:LoopbackAddress=172.17.0.2" --env "AmsConfiguration:LoopbackPort=48900" ads-cli-client -v <NetId> 'INT' 'MAIN.nCounter' '16'
