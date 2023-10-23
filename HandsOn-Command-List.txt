@@ -1,19 +1,27 @@
 #----------------------------------------------------
 #1 Basic Commands
 #----------------------------------------------------
+#Run as Administrator:
+doas
 
 #Reboot the PC. Choose either
 doas shutdown –r now
 doas reboot
-#Run as Administrator:
-doas
+doas poweroff
+
+
+
 #Text editors
 ee #simple to use
 nano # more veristile without being as obtuse as VIM
-vim #Very robust text editor, how to quit out of it has become a meme
+vim #Very robust text editor, figuring out how to quit out of it has become a meme
 
 #Get a list of hardware messages
 dmesg
+
+#enable WinSCP to edit files
+#When creating a connection "profile" go to Advanced then SFTP and enter the following into the SFTP Server field
+doas /usr/libexec/sftp-server
 
 #filter an output for lines with a keyword
 grep #example: dmesg | grep memory will output only the lines of dmesg that contain the string "memory"
@@ -42,13 +50,14 @@ doas service netif restart && doas service dhcpcd restart
 #----------------------------------------------------
 #3 Installing TwinCAT Functions
 #----------------------------------------------------
-doas pkg install TF6100-OPC-UA-beta
+doas pkg install <function-name>
+#Example: doas pkg install TF6100-OPC-UA-beta
 
 #----------------------------------------------------
 #4 tcbsd-upgrade commands
 #----------------------------------------------------
 
-#Major: 12->13
+#Major: 12.x->13.0
 doas tcbsd-upgrade --major
 
 #Minor: 13.0->13.2
@@ -65,8 +74,10 @@ doas mount –t msdosfs /dev/da0s1 /mnt/usb/
 #----------------------------------------------------
 #open auto_master and uncomment the line beginning with /media
 doas ee /etc/auto_master
-#Open devd.conf and ad the following lines
+
+#Open devd.conf 
 doas ee /etc/devd.conf
+#and add the following lines
 notify 100 {
     match   "system"    "GEOM";
     match   "subsystem" "DEV";
