@@ -55,7 +55,7 @@ vm::run(){
 		bhyve -c 2 -m 1G \
 		-A -H \
 		-l bootrom,/usr/local/share/uefi-firmware/BHYVE_BHF_UEFI.fd,"${efi_vars},fwcfg=qemu" \
-		-s 0:0,hostbridge \
+		-s 0:0,amd_hostbridge \
 		-s 1:0,virtio-blk,/dev/zvol/zroot/debian-vm_disk0 \
 		-s 2:0,virtio-net,tap0 \
 		${_installerdisk} \
