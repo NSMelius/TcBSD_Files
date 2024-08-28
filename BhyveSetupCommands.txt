@@ -1,6 +1,6 @@
 doas mkdir -p vms/debian
 
-doas fetch -o "$HOME/vms/debian/debian-installer.iso" https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.3.0-amd64-netinst.iso
+doas fetch -o "$HOME/vms/debian-installer.iso" https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.2.0-amd64-netinst.iso
 
 doas zfs create -sV 10G -o volmode=dev "zroot/debian-vm_disk0"
 
@@ -13,3 +13,8 @@ pass in quick proto tcp to port 48898
 
 doas pfctl -f /etc/pf.conf.d/bhf
 
+doas sysctl net.link.tap.up_on_open=1
+
+doas sysctl net.link.bridge.pfil_member=0
+
+doas sh debian-vm.sh run --install

@@ -2,7 +2,7 @@
 
 #This script has been modified from an example
 vm_name="debian-vm"
-vm_dir="/usr/home/Administrator/vms/debian"
+vm_dir="/usr/home/Administrator/vms/"
 iso_cd0="${vm_dir}/debian-installer.iso"
 
 vm_bridge0="bridge0"

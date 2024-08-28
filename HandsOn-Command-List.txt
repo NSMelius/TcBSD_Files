@@ -3,7 +3,7 @@
 #----------------------------------------------------
 
 #Reboot the PC. Choose either
-doas shutdown –r now
+doas shutdown -r now
 doas reboot
 #Run as Administrator:
 doas
@@ -11,6 +11,8 @@ doas
 ee #simple to use
 nano # more veristile without being as obtuse as VIM
 vim #Very robust text editor, how to quit out of it has become a meme
+
+doas /usr/libexec/sftp-server
 
 #Get a list of hardware messages
 dmesg
@@ -34,7 +36,7 @@ doas service bwf disable
 #----------------------------------------------------
 doas ee /etc/rc.conf
 #add line
-ifoncfig_nic="inet <ipaddress> netmask <255.255.255.0"
+ifconfig_nic="inet <ipaddress> netmask 255.255.255.0"
 #edit line dhcpcd_flags="--waitip" to
 dhcpcd_flags="--denyinterfaces nic"
 
@@ -42,26 +44,41 @@ doas service netif restart && doas service dhcpcd restart
 #----------------------------------------------------
 #3 Installing TwinCAT Functions
 #----------------------------------------------------
-doas pkg install TF6100-OPC-UA-beta
+doas pkg install TF2000-HMI-Server
 
 #----------------------------------------------------
 #4 tcbsd-upgrade commands
 #----------------------------------------------------
 
-#Major: 12->13
+#Major: 13->14
 doas tcbsd-upgrade --major
 
-#Minor: 13.0->13.2
+#Minor: 14.0->14.1
 doas tcbsd-upgrade --minor
 
 #----------------------------------------------------
-#5 mounting a USB drive
+#5 Installing TF1200 UI Client
 #----------------------------------------------------
-doas mkdir /mnt/usb/
-doas mount –t msdosfs /dev/da0s1 /mnt/usb/
+doas pkg install TF1200-UI-Client
+
+cd /usr/local/etc/TwinCAT/Functions/TF1200-UI-Client/scripts
+
+doas ./setup-full.sh --user=HMI --autologin --autostart
+
+doas ee /usr/home/HMI/.config/TF1200-UI-Client/config.json
+
+#add line:
+"startUrl": "http://localhost:1010"
+"enablekioskmode": true
 
 #----------------------------------------------------
-#6 Setting Automount
+#6 mounting a USB drive
+#----------------------------------------------------
+doas mkdir /mnt/usb/
+doas mount -t msdosfs /dev/da0s1 /mnt/usb/
+
+#----------------------------------------------------
+#7 Setting Automount
 #----------------------------------------------------
 #open auto_master and uncomment the line beginning with /media
 doas ee /etc/auto_master
@@ -74,7 +91,7 @@ notify 100 {
 };
 
 #Enable automount on startup
-doas sysrc autofs_enable=“YES”
+doas sysrc autofs_enable="YES"
 
 doas service automount start
 doas service automountd start
@@ -82,7 +99,7 @@ doas service autounmountd start
 doas service devd restart
 
 #----------------------------------------------------
-#7 Setting up a local repository
+#8 Setting up a local repository
 #----------------------------------------------------
 
 #create a mounting point for a USB with our packages
