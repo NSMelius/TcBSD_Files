@@ -129,7 +129,7 @@ The VM will need an internet connection to install properly. Without it, some fe
 
 The interface can be created in two ways using the ifconfig command or adding the interface to the startup command list in /etc/rc.conf. Adding the command to rc.d is preferable, because it means the bridge will be created on every boot. Open /etc/rc.d using a text editor:
 
-`doas ee /etc/rc.d`
+`doas ee /etc/rc.conf`
 
 add the following line to the file:
 
