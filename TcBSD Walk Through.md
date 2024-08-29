@@ -134,6 +134,9 @@ The interface can be created in two ways using the ifconfig command or adding th
 add the following line to the file:
 
 `cloned_interfaces="bridge0"`
+After saving, the netif needs to create the interface. This is normally done on startup, but it can be done manually by call:
+'doas service netif restart && doas service dhcpcd restart'
+Make sure to call this on the Tc/BSD computer itself, as trying to call it over SSH will fail when the second command needs the Administrator password.
 
 It is also possible to add a virtual interface called a tap device in the same way, but that will be handled by the VM script later.
 
@@ -142,6 +145,7 @@ Next, the package filter, Tc/BSD's firewall service needs to be configured to al
 Open /etc/pf.conf.d/bhf in a text editor:
 
 `doas ee /etc/pf.conf.d/bhf`
+
 
 add the following lines:
 ```sh
