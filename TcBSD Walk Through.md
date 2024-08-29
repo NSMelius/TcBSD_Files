@@ -28,7 +28,7 @@ However, this just downloads the scripts neceassry for set up. to fully install 
 
 There are a few scripts here, but only setup-full.sh is needed. the set up needs a few parameters: a user name for the user that will own/launch the client on startup, the setting to autostart the client on start up, and the setting to auto log on to the provided user. THe user does not need to already exist, the scripts will create a new user.
 
-We should NOT use the Administrator account for this.
+DO NOT use the Administrator account for this.
 
 the call for the full setup looks like:
 `doas ./setup-full.sh --user=HMI --autologin --autostart`
