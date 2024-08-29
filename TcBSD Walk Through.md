@@ -31,7 +31,7 @@ There are a few scripts here, but only setup-full.sh is needed. the set up needs
 DO NOT use the Administrator account for this.
 
 the call for the full setup looks like:
-`doas ./setup-full.sh --user=HMI --autologin --autostart`
+`doas /usr/local/etc/TwinCAT/Functions/TF1200-UI-Client/scripts/setup-full.sh --user=HMI --autologin --autostart`
 
 This will set up the client to auto start and auto log on to the HMI user. It will also create a new user directory in home where the server configuration files will be stored. if a reboot is performed now, the Ui client will load, but not display anything. 
 
