@@ -149,7 +149,7 @@ Open /etc/pf.conf.d/bhf in a text editor:
 
 add the following lines:
 ```sh
-pass in quick on bridge0`
+pass in quick on bridge0
 pass in quick proto tcp to port 5900
 
 pass in quick proto tcp to port 48898
