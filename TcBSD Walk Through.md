@@ -42,7 +42,7 @@ This will set up the client to auto start and auto log on to the HMI user. It wi
 look for the section for the web browser and add the following lines:
 
 ```json
-"startUrl": "http://localhost:1010"
+"startUrl": "https://localhost/config"
 "enablekioskmode": true
 ```
 ### Mounting a USB Drive
