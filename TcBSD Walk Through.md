@@ -176,7 +176,7 @@ Once finished run the vm script:
 
 ```cd /home/Administrator/vms/debian```
 
-``doas sh debian-vm.sh``
+``doas sh debian-vm.sh config``
 ``doas sh debian-vm.sh run --install``
 
 
