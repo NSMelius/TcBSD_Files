@@ -13,7 +13,7 @@ edit the line `dhcpcd_flags="--waitip"` to
 
 press escape then choose a for close and a again to save.
 
-to have the static ip stick, restart the dhcp client and the network interface service:
+to have the static ip be applied, restart the dhcp client and the network interface service:
 `doas service netif restart && doas service dhcpcd restart`
 
 an output with the interfaces listed and the static IP applied should display shortly after.
@@ -35,9 +35,9 @@ the call for the full setup looks like:
 
 This will set up the client to auto start and auto log on to the HMI user. It will also create a new user directory in home where the server configuration files will be stored. if a reboot is performed now, the Ui client will load, but not display anything. 
 
-​	To have the client display a website, the config file needs to be edited. to open it:
+​To have the client display a website, the config file needs to be edited. to open it:
 
-`doas ee /usr/home/HMI/.config/TF1200-UI-Client/config.json`
+`doas ee /home/HMI/.config/TF1200-UI-Client/config.json`
 
 look for the section for the web browser and add the following lines:
 
@@ -176,6 +176,7 @@ Once finished run the vm script:
 
 ```cd /home/Administrator/vms/debian```
 
+``doas sh debian-vm.sh``
 ``doas sh debian-vm.sh run --install``
 
 
